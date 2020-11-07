@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1602188381 source:/home/yvescesar/Documents/EstruturaDeDados-UNIP/pratica/Structure-implementation/main.c
+	<stdio.h>
+	<stdlib.h>
+	"listaestatica.h"
+
+1602112739 /home/yvescesar/Documents/EstruturaDeDados-UNIP/pratica/Structure-implementation/listaestatica.h
+	"Item.h"
+
+1602107972 /home/yvescesar/Documents/EstruturaDeDados-UNIP/pratica/Structure-implementation/Item.h
+
