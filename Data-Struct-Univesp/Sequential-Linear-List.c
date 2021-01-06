@@ -32,7 +32,6 @@ void exibirLista(LISTA* l) {
     printf("\"\n");
 }
 
-
 // Return vector size:
 int tamanho(LISTA* l) {
     return l -> nroElem;
@@ -70,7 +69,7 @@ void reinicializarLista(LISTA* l) {
 bool inserirElemLista(LISTA* l, REGISTRO reg, int i) {
     if((l -> nroElem >= MAX) || (i < 0) || (i > l -> nroElem))
         return FALSE; //full list or invalid index
-    
+
     for (int j = l -> nroElem; j > i; j--) l -> A[j] = l -> A[j - 1];
     l -> A[i] = reg;
     l -> nroElem++;
@@ -88,6 +87,24 @@ int buscaSequencial(LISTA* l, TIPOCHAVE ch) {
     return ERROR;
 }
 
+// Sequential search with array length MAX+1(Sentinela)
+int buscaSentinela(LISTA* l, TIPOCHAVE ch) {
+    int i = 0;
+    l->A[l->nroElem].chave = ch; // sentinela
+    while (l -> A[i].chave != ch) i++;
+    if (i > l->nroElem -1) return ERROR; // not find
+    else return i;
+}
+
+// Sequential search with order array length MAX+1(Sentinela)
+int buscaSentinela(LISTA* l, TIPOCHAVE ch) {
+    int i = 0;
+    l->A[l->nroElem].chave = ch; // sentinela
+    while (l -> A[i].chave < ch) i++;
+    if (i == l->nroElem || l -> A[i].chave != ch) return ERROR; // not find
+    else return i;
+}
+
 // Delete element when chave == ch
 bool excluirEmLista(LISTA* l, TIPOCHAVE ch) {
     int pos;
@@ -99,7 +116,7 @@ bool excluirEmLista(LISTA* l, TIPOCHAVE ch) {
 }
 
 int main() {
-    
+
 
 return 0;
 }
