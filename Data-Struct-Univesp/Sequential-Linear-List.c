@@ -97,12 +97,28 @@ int buscaSentinela(LISTA* l, TIPOCHAVE ch) {
 }
 
 // Sequential search with order array length MAX+1(Sentinela)
-int buscaSentinela(LISTA* l, TIPOCHAVE ch) {
+int buscaSentinelaOrdenada(LISTA* l, TIPOCHAVE ch) {
     int i = 0;
     l->A[l->nroElem].chave = ch; // sentinela
     while (l -> A[i].chave < ch) i++;
     if (i == l->nroElem || l -> A[i].chave != ch) return ERROR; // not find
     else return i;
+}
+
+// Binary Search
+int buscaBinaria(LISTA* l, TIPOCHAVE ch) {
+    int esq, dir, meio;
+    esq = 0;
+    dir = l->nroElem - 1;
+    while (esq <= dir) {
+        meio = ((esq + dir) / 2);
+        if (l -> A[meio].chave == ch) return meio; // found
+        else {
+            if (l ->A[meio].chave < ch) esq = meio + 1;
+            else dir = meio - 1;
+        }
+        return ERROR;
+    }
 }
 
 // Delete element when chave == ch
