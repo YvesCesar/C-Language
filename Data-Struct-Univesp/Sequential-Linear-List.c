@@ -13,6 +13,11 @@ typedef struct {
     //Others fields
 } REGISTRO;
 
+typedef struct{
+  REGISTRO reg;
+  int prox;
+} ELEMENTO;
+
 typedef struct {
     REGISTRO A[MAX + 1];
     int nroElem;
@@ -67,6 +72,17 @@ void reinicializarLista(LISTA* l) {
 
 // Direct insertion (Position A[i])
 bool inserirElemLista(LISTA* l, REGISTRO reg, int i) {
+    if((l -> nroElem >= MAX) || (i < 0) || (i > l -> nroElem))
+        return FALSE; //full list or invalid index
+
+    for (int j = l -> nroElem; j > i; j--) l -> A[j] = l -> A[j - 1];
+    l -> A[i] = reg;
+    l -> nroElem++;
+    return TRUE;
+}
+
+// Direct insertion (Position A[i])
+bool inserirElemListaOrd(LISTA* l, REGISTRO reg, int i) {
     if((l -> nroElem >= MAX) || (i < 0) || (i > l -> nroElem))
         return FALSE; //full list or invalid index
 
