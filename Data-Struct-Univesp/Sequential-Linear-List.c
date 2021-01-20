@@ -81,17 +81,6 @@ bool inserirElemLista(LISTA* l, REGISTRO reg, int i) {
     return TRUE;
 }
 
-// Direct insertion (Position A[i])
-bool inserirElemListaOrd(LISTA* l, REGISTRO reg, int i) {
-    if((l -> nroElem >= MAX) || (i < 0) || (i > l -> nroElem))
-        return FALSE; //full list or invalid index
-
-    for (int j = l -> nroElem; j > i; j--) l -> A[j] = l -> A[j - 1];
-    l -> A[i] = reg;
-    l -> nroElem++;
-    return TRUE;
-}
-
 // Sequential search in ordered list or not:
 int buscaSequencial(LISTA* l, TIPOCHAVE ch) {
     int i = 0;
@@ -137,18 +126,87 @@ int buscaBinaria(LISTA* l, TIPOCHAVE ch) {
     }
 }
 
-// Delete element when chave == ch
-bool excluirEmLista(LISTA* l, TIPOCHAVE ch) {
+// Delete element when chave == ch in an ordered list
+bool excluirElemLista(LISTA* l, TIPOCHAVE ch) {
     int pos;
     pos = buscaSequencial(l, ch);
-    if(pos ==  ERROR) return FALSE; //No exists
+    if(pos ==  ERROR) return FALSE; // No exists
     for(int j = pos; j < l -> nroElem - 1; j++) l -> A[j] = l -> A[j + 1];
     l -> nroElem--;
     return TRUE;
 }
 
+// Delete element when chave == ch in an ordered list
+bool excluirElemListaOrd(LISTA* l, TIPOCHAVE ch) {
+    int pos, j;
+    pos = buscaBinaria(l, ch);
+    if (pos == ERROR) return FALSE; // No exists
+    for(j = pos; j < l->nroElem - 1; j++) l->A[j] = l->A[j+1];
+    l->nroElem--;
+    return TRUE;
+}
+
+// Ordered list insertion using binary search allowing duplication
+bool inserirElemListaOrd(LISTA* l, REGISTRO reg) {
+    if (l->nroElem >= MAX) return FALSE; // full list
+    int pos = l->nroElem;
+    while (pos > 0 && l->A[pos - 1].chave > reg.chave) {
+        l->A[pos] = l->A[pos - 1];
+        pos--;
+    }
+    l->A[pos] = reg;
+    l->nroElem++;
+    return TRUE;
+}
+
+// Ordered list insertion using binary search without duplication
+bool inserirElemListaOrdSemDup(LISTA* l, REGISTRO reg) {
+    if(l->nroElem >= MAX) return FALSE; // full list
+    int pos;
+    pos = buscaBinaria(l,reg.chave);
+    if(pos != ERROR) return FALSE; // element already exists
+    pos = l->nroElem-1;
+    while(pos>0 && l->A[pos].chave > reg.chave) {
+        l->A[pos+1] = l->A[pos];
+        pos--;
+    }
+    l->A[pos+1] = reg;
+    l->nroElem++;
+    return TRUE;
+}
 int main() {
-
-
+    LISTA lista;
+    inicializarLista(&lista);
+    exibirLista(&lista);
+    printf("Numero de elementos na lista: %i.\n",tamanho(&lista));
+    printf("Tamanho da lista (em bytes): %i.\n",tamanhoEmBytes(&lista));
+    REGISTRO reg;
+    reg.chave = 9;
+    inserirElemListaOrd(&lista,reg);
+    exibirLista(&lista);
+    reg.chave=3;
+    inserirElemListaOrd(&lista,reg);
+    reg.chave=4;
+    inserirElemListaOrd(&lista,reg);
+    reg.chave=1;
+    inserirElemListaOrd(&lista,reg);
+    reg.chave=12;
+    inserirElemListaOrd(&lista,reg);
+    exibirLista(&lista);
+    printf("Numero de elementos na lista: %i.\n",tamanho(&lista));
+    printf("Tamanho da lista (em bytes): %i.\n",tamanhoEmBytes(&lista));
+    printf("Chave 4 encontrada na posicao: %i do arranjo A.\n",buscaSequencial(&lista,4));
+    printf("Chave 4 encontrada na posicao: %i do arranjo A.\n",buscaBinaria(&lista,4));
+    printf("Chave 4 encontrada na posicao: %i do arranjo A.\n",buscaSentinela(&lista,4));
+    if (excluirElemLista(&lista,4)) printf("Exclusao bem sucedida: 4.\n");
+    if (excluirElemLista(&lista,8)) printf("Exclusao bem sucedida: 8.\n");
+    if (excluirElemLista(&lista,9)) printf("Exclusao bem sucedida: 9.\n");
+    exibirLista(&lista);
+    printf("Numero de elementos na lista: %i.\n",tamanho(&lista));
+    printf("Tamanho da lista (em bytes): %i.\n",tamanhoEmBytes(&lista));
+    reinicializarLista(&lista);
+    exibirLista(&lista);
+    printf("Numero de elementos na lista: %i.\n",tamanho(&lista));
+    printf("Tamanho da lista (em bytes): %i.\n",tamanhoEmBytes(&lista));
 return 0;
 }
